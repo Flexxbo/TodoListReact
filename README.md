@@ -1,2 +1,0 @@
-# TodoListTutorialReact
-Created with CodeSandbox
