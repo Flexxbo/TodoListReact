@@ -33,39 +33,89 @@ class App extends Component {
   // + handle submit pushes to database immediately
   handleSubmit = (event) => {
     event.preventDefault();
-    const newItem = {
-      id: this.state.id,
-      title: this.state.item,
-    };
-    /*
-     *this I will only need if I use array instead of database
-     *   const updatedItems = [...this.state.items, newItem];
-     *
-     *   this.setState({
-     *    items: updatedItems,
-     *   item: "",
-     *  id: uuidv1(),
-     * editItem: false,
-     * });
-     */
+    if (this.state.editItem === false) {
+      const newItem = {
+        id: this.state.id,
+        title: this.state.item,
+      };
+      /*
+       *this I will only need if I use array instead of database
+       *   const updatedItems = [...this.state.items, newItem];
+       *
+       *   this.setState({
+       *    items: updatedItems,
+       *   item: "",
+       *  id: uuidv1(),
+       * editItem: false,
+       * });
+       */
 
-    fetch("http://localhost:3001/todo", {
-      method: "POST",
+      fetch("http://localhost:3001/todo", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newItem),
+      })
+        .then((response) => {
+          //console.log(newItem);
+          //console.log(this.state.items);
+          return response.text();
+        })
+        .then((data) => {
+          alert(data);
+          this.componentDidMount();
+        });
+    } else {
+      fetch(`http://localhost:3001/todo/${this.state.id}`, {
+        method: "Put",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ todo: this.state.selectedItem.title }),
+      })
+        .then((response) => {
+          response.json();
+        })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+  };
+
+  handleEdit = (id) => {
+    const filteredItems = this.state.items.filter((item) => item.id !== id);
+
+    const selectedItem = this.state.items.find((item) => item.id === id);
+
+    console.log(selectedItem);
+    this.setState({
+      items: filteredItems,
+      item: selectedItem.title,
+      editItem: true,
+      id: id,
+    });
+  };
+
+  /* fetch(`http://localhost:3001/todo/${id}`, {
+      method: "Put",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(newItem),
+      body: JSON.stringify({ todo: selectedItem.title }),
     })
       .then((response) => {
-        //console.log(newItem);
-        //console.log(this.state.items);
-        return response.text();
+        response.json();
       })
       .then((data) => {
-        alert(data);
-        this.componentDidMount();
-      });
-  };
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      }); */
 
   clearList = () => {
     //*this I need if I use array instead of database
@@ -103,21 +153,32 @@ class App extends Component {
       });
   };
 
-  handleEdit = (id) => {
+  /* handleEdit = (id) => {
     const filteredItems = this.state.items.filter((item) => item.id !== id);
-
     const selectedItem = this.state.items.find((item) => item.id === id);
-
     console.log(selectedItem);
-    this.setState({
-      items: filteredItems,
-      item: selectedItem.title,
-      editItem: true,
-      id: id,
-    });
+    fetch(`http://localhost:3001/todo/${id}`, {
+      method: "Put",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(selectedItem.title),
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+ 
   };
+  */
+
   render() {
-    console.log("logging state", this.state);
+    //console.log("logging state", this.state);
     return (
       <div className="container">
         <div className="row">
@@ -127,13 +188,13 @@ class App extends Component {
               item={this.state.item}
               handleChange={this.handleChange}
               handleSubmit={this.handleSubmit}
-              editItem={this.state.editItem}
+    /* editItem={this.state.editItem}*/
             />
             <TodoList
               items={this.state.items}
               clearList={this.clearList}
               handleDelete={this.handleDelete}
-              handleEdit={this.handleEdit}
+            /*  handleEdit={this.handleEdit}*/
             />
           </div>
         </div>

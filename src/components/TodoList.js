@@ -13,7 +13,7 @@ export default class TodoList extends Component {
               key={item.id}
               title={item.todo}
               handleDelete={() => handleDelete(item.id)}
-              handleEdit={() => handleEdit(item.id)}
+            /* handleEdit={() => handleEdit(item.id)}*/
             />
           );
         })}
