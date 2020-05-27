@@ -2,6 +2,7 @@
   "name": "todo-list-tutorial-rebuild",
   "version": "1.0.0",
   "engines": {
+    "npm": "5.7.1",
     "node": "12.16.x"
   },
   "description": "",
