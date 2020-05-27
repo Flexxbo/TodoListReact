@@ -3,8 +3,6 @@ import TodoInput from "./components/TodoInput.js";
 import TodoList from "./components/TodoList.js";
 import { v1 as uuidv1 } from "uuid";
 
-
-
 class App extends Component {
   state = {
     items: [],
@@ -13,38 +11,43 @@ class App extends Component {
     editItem: false,
   };
 
+  // + Component did Mount for loading/reloading page and waiting for data be fetched
   componentDidMount() {
     fetch("http://localhost:3001")
       .then((response) => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        //console.log(data);
         this.setState({ items: data });
       });
   }
 
+  // ! not connected put request yet
   handleChange = (event) => {
     this.setState({
       item: event.target.value,
     });
   };
 
+  // + handle submit pushes to database immediately
   handleSubmit = (event) => {
     event.preventDefault();
     const newItem = {
       id: this.state.id,
       title: this.state.item,
     };
-
-    const updatedItems = [...this.state.items, newItem];
-
-    this.setState({
-      items: updatedItems,
-      item: "",
-      id: uuidv1(),
-      editItem: false,
-    });
+    /*
+     *this I will only need if I use array instead of database
+     *   const updatedItems = [...this.state.items, newItem];
+     *
+     *   this.setState({
+     *    items: updatedItems,
+     *   item: "",
+     *  id: uuidv1(),
+     * editItem: false,
+     * });
+     */
 
     fetch("http://localhost:3001/todo", {
       method: "POST",
@@ -65,24 +68,39 @@ class App extends Component {
   };
 
   clearList = () => {
-    this.setState({ items: [] });
+    //*this I need if I use array instead of database
+    //*this.setState({ items: [] });
+    fetch(`http://localhost:3001/todo`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((data) => {
+        alert(data);
+        this.componentDidMount();
+      });
   };
 
   handleDelete = (id) => {
-    const filteredItems = this.state.items.filter((item) => item.id !== id);
-    this.setState({
-      items: filteredItems,
-    });
-    /*fetch(`http://localhost:3001/todo/${id}`, {
-      method: 'DELETE',
+    console.log("this is id deleted", id);
+    /*
+     *this I will only need if I use array instead of database
+     *const filteredItems = this.state.items.filter((item) => item.id !== id);
+     *this.setState({
+     *  items: filteredItems,
+     *});
+     */
+    fetch(`http://localhost:3001/todo/${id}`, {
+      method: "DELETE",
     })
-      .then(response => {
+      .then((response) => {
         return response.text();
       })
-      .then(data => {
+      .then((data) => {
         alert(data);
-        //getMerchant();
-      });*/
+        this.componentDidMount();
+      });
   };
 
   handleEdit = (id) => {
@@ -125,13 +143,3 @@ class App extends Component {
 }
 
 export default App;
-
-/*            {fetchedTodos}
-            {fetchedTodos.items ? (
-              fetchedTodos
-            ) : (
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            )}
- */
