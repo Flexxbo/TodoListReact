@@ -3,24 +3,54 @@ import TodoInput from "./components/TodoInput.js";
 import TodoList from "./components/TodoList.js";
 import { v1 as uuidv1 } from "uuid";
 
+let arrays = [];
+
 class App extends Component {
   state = {
     items: [],
     id: uuidv1(),
     item: "",
-    editItem: false
+    editItem: false,
   };
-  handleChange = event => {
+
+  componentDidMount() {
+    function getTodos() {
+      fetch("http://localhost:3001")
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          return data.map(function (item) {
+            arrays.push(item);
+            console.log(arrays);
+          });
+          return (
+            <TodoList
+              items={this.state.items}
+              clearList={this.clearList}
+              handleDelete={this.handleDelete}
+              handleEdit={this.handleEdit}
+            />
+          );
+        });
+    }
+    //getTodos();
+    this.setState();
+    //console.log(this.state);
+    console.log(this.state.items);
+  }
+
+  handleChange = (event) => {
     this.setState({
-      item: event.target.value
+      item: event.target.value,
     });
   };
-  handleSubmit = event => {
-    event.preventDefault();
 
+  handleSubmit = (event) => {
+    event.preventDefault();
     const newItem = {
       id: this.state.id,
-      title: this.state.item
+      title: this.state.item,
     };
 
     const updatedItems = [...this.state.items, newItem];
@@ -29,30 +59,59 @@ class App extends Component {
       items: updatedItems,
       item: "",
       id: uuidv1(),
-      editItem: false
+      editItem: false,
     });
+
+    fetch("http://localhost:3001/todo", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newItem),
+    })
+      .then((response) => {
+        console.log(newItem);
+        console.log(this.state.items);
+        return response.text();
+      })
+      .then((data) => {
+        alert(data);
+        //getTodo();
+      });
   };
 
   clearList = () => {
     this.setState({ items: [] });
   };
-  handleDelete = id => {
-    const filteredItems = this.state.items.filter(item => item.id !== id);
-    this.setState({
-      items: filteredItems
-    });
-  };
-  handleEdit = id => {
-    const filteredItems = this.state.items.filter(item => item.id !== id);
 
-    const selectedItem = this.state.items.find(item => item.id === id);
+  handleDelete = (id) => {
+    const filteredItems = this.state.items.filter((item) => item.id !== id);
+    this.setState({
+      items: filteredItems,
+    });
+    /*fetch(`http://localhost:3001/todo/${id}`, {
+      method: 'DELETE',
+    })
+      .then(response => {
+        return response.text();
+      })
+      .then(data => {
+        alert(data);
+        //getMerchant();
+      });*/
+  };
+
+  handleEdit = (id) => {
+    const filteredItems = this.state.items.filter((item) => item.id !== id);
+
+    const selectedItem = this.state.items.find((item) => item.id === id);
 
     console.log(selectedItem);
     this.setState({
       items: filteredItems,
       item: selectedItem.title,
       editItem: true,
-      id: id
+      id: id,
     });
   };
   render() {
