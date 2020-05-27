@@ -3,7 +3,7 @@ import TodoInput from "./components/TodoInput.js";
 import TodoList from "./components/TodoList.js";
 import { v1 as uuidv1 } from "uuid";
 
-let arrays = [];
+
 
 class App extends Component {
   state = {
@@ -14,30 +14,14 @@ class App extends Component {
   };
 
   componentDidMount() {
-    function getTodos() {
-      fetch("http://localhost:3001")
-        .then((response) => {
-          return response.json();
-        })
-        .then((data) => {
-          return data.map(function (item) {
-            arrays.push(item);
-            console.log(arrays);
-          });
-          return (
-            <TodoList
-              items={this.state.items}
-              clearList={this.clearList}
-              handleDelete={this.handleDelete}
-              handleEdit={this.handleEdit}
-            />
-          );
-        });
-    }
-    //getTodos();
-    this.setState();
-    //console.log(this.state);
-    console.log(this.state.items);
+    fetch("http://localhost:3001")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+        this.setState({ items: data });
+      });
   }
 
   handleChange = (event) => {
@@ -70,13 +54,13 @@ class App extends Component {
       body: JSON.stringify(newItem),
     })
       .then((response) => {
-        console.log(newItem);
-        console.log(this.state.items);
+        //console.log(newItem);
+        //console.log(this.state.items);
         return response.text();
       })
       .then((data) => {
         alert(data);
-        //getTodo();
+        this.componentDidMount();
       });
   };
 
@@ -115,6 +99,7 @@ class App extends Component {
     });
   };
   render() {
+    console.log("logging state", this.state);
     return (
       <div className="container">
         <div className="row">
@@ -140,3 +125,13 @@ class App extends Component {
 }
 
 export default App;
+
+/*            {fetchedTodos}
+            {fetchedTodos.items ? (
+              fetchedTodos
+            ) : (
+              <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+              </div>
+            )}
+ */
