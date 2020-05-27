@@ -1,6 +1,9 @@
 {
   "name": "todo-list-tutorial-rebuild",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.16.x"
+  },
   "description": "",
   "keywords": [],
   "main": "src/index.js",
