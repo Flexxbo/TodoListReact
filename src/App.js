@@ -13,7 +13,7 @@ class App extends Component {
 
   // + Component did Mount for loading/reloading page and waiting for data be fetched
   componentDidMount() {
-    fetch("http://localhost:3001")
+    fetch("https://todolistfstack.herokuapp.com/")
       .then((response) => {
         return response.json();
       })
@@ -50,7 +50,7 @@ class App extends Component {
        * });
        */
 
-      fetch("http://localhost:3001/todo", {
+      fetch("https://todolistfstack.herokuapp.com/todo", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,7 +67,7 @@ class App extends Component {
           this.componentDidMount();
         });
     } else {
-      fetch(`http://localhost:3001/todo/${this.state.id}`, {
+      fetch(`https://todolistfstack.herokuapp.com/todo/${this.state.id}`, {
         method: "Put",
         headers: {
           "Content-Type": "application/json",
@@ -120,7 +120,7 @@ class App extends Component {
   clearList = () => {
     //*this I need if I use array instead of database
     //*this.setState({ items: [] });
-    fetch(`http://localhost:3001/todo`, {
+    fetch(`https://todolistfstack.herokuapp.com/todo`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -141,7 +141,7 @@ class App extends Component {
      *  items: filteredItems,
      *});
      */
-    fetch(`http://localhost:3001/todo/${id}`, {
+    fetch(`https://todolistfstack.herokuapp.com/todo/${id}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -188,13 +188,13 @@ class App extends Component {
               item={this.state.item}
               handleChange={this.handleChange}
               handleSubmit={this.handleSubmit}
-    /* editItem={this.state.editItem}*/
+              /* editItem={this.state.editItem}*/
             />
             <TodoList
               items={this.state.items}
               clearList={this.clearList}
               handleDelete={this.handleDelete}
-            /*  handleEdit={this.handleEdit}*/
+              /*  handleEdit={this.handleEdit}*/
             />
           </div>
         </div>
