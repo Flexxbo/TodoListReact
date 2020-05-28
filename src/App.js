@@ -56,18 +56,17 @@ class App extends Component {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(newItem),
-      })
-        .then((response) => {
-          // ! do I actually need this part? it is just messing up the response I think
-          //console.log(newItem);
-          //console.log(this.state.items);
-          return response.text();
-        })
-        .then((data) => {
+      }).then((response) => {
+        // ! do I actually need this part? it is just messing up the response I think
+        //console.log(newItem);
+        //console.log(this.state.items);
+        return response.text();
+      });
+      /* .then((data) => {
           console.log("this is coming from 66", data);
           alert("this is my data67:", data);
           this.componentDidMount();
-        });
+        })*/
     } else {
       fetch(`https://todolistfstack.herokuapp.com/todo/${this.state.id}`, {
         method: "Put",
