@@ -63,6 +63,7 @@ class App extends Component {
           return response.text();
         })
         .then((data) => {
+          console.log("this is coming from 66", data);
           alert(data);
           this.componentDidMount();
         });
@@ -78,6 +79,7 @@ class App extends Component {
           response.json();
         })
         .then((data) => {
+          console.log("this comes from else 82, data");
           console.log(data);
         })
         .catch((e) => {
