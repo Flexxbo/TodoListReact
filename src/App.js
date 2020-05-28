@@ -60,6 +60,7 @@ class App extends Component {
         // ! do I actually need this part? it is just messing up the response I think
         //console.log(newItem);
         //console.log(this.state.items);
+        this.componentDidMount();
         return response.text();
       });
       /* .then((data) => {
